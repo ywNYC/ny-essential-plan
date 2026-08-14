@@ -1,0 +1,30 @@
+name: Auto-update Essential Plan News
+# 参考 GCTracker 的 scrape-bulletin 自动化模式：定时跑抓取脚本，有变化就提交回仓库，
+# Cloudflare Pages 检测到 push 自动重新部署。部署前需要先建好 GitHub 仓库 + 远程，
+# 且 Settings → Actions → General → Workflow permissions 设为 "Read and write"。
+# 目前仓库还没建远程，这个 workflow 只是就位待用，不会自动运行。
+
+on:
+  schedule:
+    - cron: '0 13 * * *' # 每天 UTC 13:00 = EST 8am 前后
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node scripts/scrape-news.mjs
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/news.json
+          git diff --cached --quiet || git commit -m "chore: auto-update news.json"
+          git push

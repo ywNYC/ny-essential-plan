@@ -1,0 +1,18 @@
+name: Daily SEP Reminder Check
+# 每天调用一次 /api/remind-check 触发到期提醒扫描。跟 scrape-news.yml 一样，
+# 目前仓库还没建远程 + 部署，这个 workflow 就位待用，不会自动运行。
+# 部署后需要在 GitHub 仓库 Settings → Secrets 里配 SITE_URL 和 CRON_SECRET
+# （CRON_SECRET 要跟 Cloudflare Pages 环境变量里的 CRON_SECRET 一致）。
+
+on:
+  schedule:
+    - cron: '0 13 * * *' # 每天 UTC 13:00 = EST 8am 前后
+  workflow_dispatch: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call remind-check endpoint
+        run: |
+          curl -sf "${{ secrets.SITE_URL }}/api/remind-check?secret=${{ secrets.CRON_SECRET }}"
