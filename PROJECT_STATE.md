@@ -35,7 +35,6 @@ FPL 数字、关键日期、DACA 138% 门槛等均见 `src/data/content.js` 顶�
 3. **QHP 对比表真实数据** — `src/data/content.js` 的 `QHP_COMPARISON_TEMPLATE.rows` 是空数组，需要经纪人拉 2026 实时报价后填入
 4. **经纪人/Navigator 真实名单** — `BROKER_DIRECTORY` 目前是占位条目
 5. **自定义域名** — 目前只有 `*.pages.dev` 预览地址，没接自定义域名
-6. **这次 UI 重做还没部署** — 只在本地验证过，`wrangler pages deploy` 还没跑，线上 `ny-essential-plan.pages.dev` 目前还是旧版单页多 tab 的样子，没有语言弹窗/填写流程
 
 ## 本地跑起来
 
