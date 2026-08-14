@@ -1,0 +1,14 @@
+{
+  "name": "ny-essential-plan",
+  "pages_build_output_dir": "dist",
+  "kv_namespaces": [
+    {
+      "binding": "REMINDERS",
+      "id": "268dc259309342198234d14352cec376"
+    }
+  ],
+  "vars": {
+    "RESEND_FROM": "NY Essential Plan Tracker <notice@mail.jmjvc.us>",
+    "SITE_URL": "https://ny-essential-plan.pages.dev"
+  }
+}

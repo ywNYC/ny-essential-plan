@@ -1,6 +1,9 @@
 # NY Essential Plan Tracker — 项目状态
 
-架构照抄 GCTracker/rate-jmjvc-us 的模式：Vite + React + Tailwind 前端，Cloudflare Pages Functions 做后端，`scripts/*.mjs` 零依赖 Node 脚本抓数据，GitHub Actions 定时任务跑脚本（模板已就位，仓库还没建远程，未激活）。
+架构照抄 GCTracker/rate-jmjvc-us 的模式：Vite + React + Tailwind 前端，Cloudflare Pages Functions 做后端，`scripts/*.mjs` 零依赖 Node 脚本抓数据，GitHub Actions 定时任务跑脚本（模板已就位，未接通触发——见下）。
+
+**仓库**：`github.com/ywNYC/ny-essential-plan`（public）
+**线上预览**：`https://ny-essential-plan.pages.dev`（Cloudflare Pages，2026-08-14 部署，已用 playwright 验证生产环境 console 零报错）
 
 ## 已完成（2026-08-13 本地验证通过，含 headless 浏览器截图 + console 零报错）
 
@@ -21,8 +24,13 @@ FPL 数字、关键日期、DACA 138% 门槛等均见 `src/data/content.js` 顶�
 1. **Twilio 账号** — SMS 提醒代码已写好（`functions/api/remind.js` / `remind-check.js`），但 `TWILIO_ACCOUNT_SID` / `TWILIO_AUTH_TOKEN` / `TWILIO_FROM_NUMBER` 需要业主自己去 twilio.com 注册申请，我没法代开户
 2. **QHP 对比表真实数据** — `src/data/content.js` 的 `QHP_COMPARISON_TEMPLATE.rows` 是空数组，需要经纪人拉 2026 实时报价后填入
 3. **经纪人/Navigator 真实名单** — `BROKER_DIRECTORY` 目前是占位条目
-4. **部署** — 还没建 GitHub 远程仓库、没配 Cloudflare Pages 项目、没跑过 `wrangler pages deploy`，全部等业主明确要求再做（`.github/workflows/*.yml` 两个 cron 模板已写好但未激活）
-5. **KV namespace** — `REMINDERS` 需要在 Cloudflare Pages 项目里建好并绑定，本地 `npm run dev` 测不了 `/api/remind*`（Pages Functions 需要部署或 `wrangler pages dev`）
+4. **KV namespace 未绑定** — `REMINDERS` 还没在 Cloudflare Pages 项目里建、没绑定，所以线上 `/api/remind` 目前返回 500（已实测确认是「未绑定」的可控失败，不是崩溃）。要让提醒功能真正工作，需要：
+   - Cloudflare 后台建一个 KV namespace，在 Pages 项目 Settings → Functions 里绑定为 `REMINDERS`
+   - 配 `RESEND_API_KEY` / `RESEND_FROM`（可以直接复用 rate.jmjvc.us 那一份）
+   - 配 `CRON_SECRET`（配合 `.github/workflows/check-reminders.yml`）
+   - 要短信还要配三个 `TWILIO_*`
+5. **两个 GitHub Actions cron 还没激活** — `.github/workflows/scrape-news.yml`、`check-reminders.yml` 已随仓库推送，但仓库 Settings → Actions → General → Workflow permissions 还没设成 "Read and write"（参考 GCTracker 当年踩的同一个坑），且 `check-reminders.yml` 依赖的 `SITE_URL`/`CRON_SECRET` repo secrets 还没配
+6. **自定义域名** — 目前只有 `*.pages.dev` 预览地址，没接自定义域名
 
 ## 本地跑起来
 
