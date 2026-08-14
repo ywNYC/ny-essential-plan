@@ -2,6 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 配色/字号体系照抄 GCTracker 的 "Passport Bureau" 主题（暖米色纸感 + 常青绿，编辑感），
+   变量前缀换成 ep- 避免和其他自建站混淆，数值原样复用，保证同一批网站视觉一致。 */
+:root {
+  --ep-paper: #f6f2e8;
+  --ep-paper-soft: #f0ebdb;
+  --ep-surface: #fdfcf7;
+  --ep-ink: #111418;
+  --ep-ink-soft: #3a3f45;
+  --ep-muted: #6b6f75;
+  --ep-muted-soft: #8a8f96;
+  --ep-rule: #d6cfbb;
+  --ep-rule-soft: #e5dfcc;
+  --ep-subtle: #c5beaa;
+
+  --ep-green: #0e4d2e;
+  --ep-green-soft: #e4ece3;
+  --ep-green-ink: #0a3a23;
+  --ep-green-border: #93b7a0;
+
+  --ep-amber: #8a5a00;
+  --ep-amber-soft: #f1e5c2;
+  --ep-amber-ink: #4e3300;
+  --ep-amber-border: #b89a55;
+
+  --ep-red: #8c1919;
+  --ep-red-soft: #efd9d9;
+  --ep-red-ink: #4e0e0e;
+  --ep-red-border: #b88585;
+
+  --ep-radius-lg: 6px;
+  --ep-radius: 4px;
+  --ep-radius-sm: 3px;
+  --ep-font-display: ui-serif, "Iowan Old Style", Palatino, Georgia, "Times New Roman", serif;
+}
+
+.ep-serif { font-family: var(--ep-font-display); letter-spacing: -0.005em; }
+.ep-mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; font-variant-numeric: tabular-nums; }
+.ep-eyebrow { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; color: var(--ep-muted); }
+
 html, body, #root {
   height: 100%;
   margin: 0;
@@ -13,10 +52,22 @@ html, body, #root {
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
                'Microsoft YaHei', 'Noto Sans SC', Roboto, sans-serif;
-  background: #f6f2e8;
+  background: var(--ep-paper);
 }
 
 html, body {
   overflow-x: hidden;
   max-width: 100vw;
+}
+
+@keyframes epBackdropIn {
+  from { opacity: 0; backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); }
+  to   { opacity: 1; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+}
+@keyframes epCardIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.985); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ep-modal-backdrop, .ep-modal-card { animation: none !important; }
 }
